@@ -137,7 +137,7 @@
   .stat-value {
     font-size: 32px;
     font-weight: 700;
-    color: var(--accent, var(--cyan));
+    color: var(--text);
     line-height: 1;
     font-variant-numeric: tabular-nums;
   }
@@ -560,10 +560,10 @@
 
   <!-- STATS -->
   <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-label">Current Tach</div>
-      <div class="stat-value" id="statTach">—</div>
-      <div class="stat-unit">hours</div>
+    <div class="stat-card amber">
+      <div class="stat-label">Last Flight</div>
+      <div class="stat-value" id="statLastDate" style="font-size:28px; padding-top:4px">—</div>
+      <div class="stat-unit" id="statDaysAgo"></div>
     </div>
     <div class="stat-card violet">
       <div class="stat-label">Current Hobbs</div>
@@ -575,10 +575,10 @@
       <div class="stat-value" id="statFlights">—</div>
       <div class="stat-unit">logged entries</div>
     </div>
-    <div class="stat-card amber">
-      <div class="stat-label">Last Flight</div>
-      <div class="stat-value" id="statLastDate" style="font-size:20px; padding-top:6px">—</div>
-      <div class="stat-unit" id="statDaysAgo"></div>
+    <div class="stat-card">
+      <div class="stat-label">Current Tach</div>
+      <div class="stat-value" id="statTach">—</div>
+      <div class="stat-unit">hours</div>
     </div>
     <div class="stat-card" id="oilCard">
       <div class="stat-label">Oil Change</div>
