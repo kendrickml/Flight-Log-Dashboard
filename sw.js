@@ -1,6 +1,6 @@
 const CACHE = 'n685sm-v1';
 const ASSETS = [
-  '/685SM_Dashboard.html',
+  '/Flight-Log-Dashboard/',
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',

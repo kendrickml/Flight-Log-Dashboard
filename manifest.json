@@ -2,7 +2,7 @@
   "name": "N685SM Flight Dashboard",
   "short_name": "N685SM",
   "description": "Flight operations dashboard for N685SM Super Decathlon",
-  "start_url": "/685SM_Dashboard.html",
+  "start_url": "/Flight-Log-Dashboard/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#0c1a42",
