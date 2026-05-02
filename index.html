@@ -45,7 +45,7 @@
   header {
     background: linear-gradient(135deg, #0c1a42 0%, #1a3f7a 55%, #0a6097 100%);
     border-bottom: none;
-    padding: 22px 32px;
+    padding: calc(env(safe-area-inset-top) + 22px) 32px 22px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -635,33 +635,6 @@
     </div>
   </div>
 
-  <!-- FLIGHT LOG TABLE -->
-  <div class="table-card">
-    <div class="table-header">
-      <div class="table-title">Flight Log</div>
-      <div class="table-count" id="flightCount">0 entries</div>
-    </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Tach Out</th>
-            <th>Tach In</th>
-            <th>Tach Total</th>
-            <th>Hobbs Out</th>
-            <th>Hobbs In</th>
-            <th>Hobbs Total</th>
-            <th>Oil Added</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-        <tbody id="logTableBody"></tbody>
-      </table>
-    </div>
-  </div>
-
   <!-- NEW ENTRY -->
   <div class="entry-card">
     <div class="entry-header">
@@ -757,6 +730,33 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- FLIGHT LOG TABLE -->
+  <div class="table-card">
+    <div class="table-header">
+      <div class="table-title">Flight Log</div>
+      <div class="table-count" id="flightCount">0 entries</div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Date</th>
+            <th>Tach Out</th>
+            <th>Tach In</th>
+            <th>Tach Total</th>
+            <th>Hobbs Out</th>
+            <th>Hobbs In</th>
+            <th>Hobbs Total</th>
+            <th>Oil Added</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody id="logTableBody"></tbody>
+      </table>
     </div>
   </div>
 
