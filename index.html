@@ -120,6 +120,95 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 20px rgba(15,23,42,0.1);
   }
+  .stat-card.tappable {
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .stat-card.tappable:active {
+    transform: scale(0.97);
+    box-shadow: 0 1px 4px rgba(15,23,42,0.08);
+  }
+  .tap-hint {
+    position: absolute;
+    bottom: 8px;
+    right: 10px;
+    font-size: 9px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+
+  /* MODAL BOTTOM SHEET */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .modal-backdrop.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .modal-sheet {
+    background: var(--bg2);
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    padding: 12px 28px calc(env(safe-area-inset-bottom) + 32px);
+    max-height: 80vh;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.32,0.72,0,1);
+  }
+  .modal-backdrop.open .modal-sheet {
+    transform: translateY(0);
+  }
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+  .modal-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 24px;
+    letter-spacing: -0.3px;
+  }
+  .modal-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(207,220,234,0.6);
+  }
+  .modal-stat:last-child { border-bottom: none; }
+  .modal-stat-label {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .modal-stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+  .modal-stat-value.accent { color: var(--cyan); }
+  .modal-section-title {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin: 24px 0 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(2,132,199,0.15);
+  }
   .stat-card::before {
     content: '';
     position: absolute;
@@ -560,30 +649,33 @@
 
   <!-- STATS -->
   <div class="stats-grid">
-    <div class="stat-card">
+    <div class="stat-card tappable" onclick="showLastFlightDetail()">
       <div class="stat-label">Last Flight</div>
       <div class="stat-value" id="statDaysAgo">—</div>
       <div class="stat-unit" id="statLastDate"></div>
+      <div class="tap-hint">details ›</div>
     </div>
     <div class="stat-card violet">
       <div class="stat-label">Current Hobbs</div>
       <div class="stat-value" id="statHobbs">—</div>
       <div class="stat-unit">hours</div>
     </div>
-    <div class="stat-card green">
+    <div class="stat-card green tappable" onclick="showTotalFlightsDetail()">
       <div class="stat-label">Total Flights</div>
       <div class="stat-value" id="statFlights">—</div>
       <div class="stat-unit">logged entries</div>
+      <div class="tap-hint">details ›</div>
     </div>
     <div class="stat-card amber">
       <div class="stat-label">Current Tach</div>
       <div class="stat-value" id="statTach">—</div>
       <div class="stat-unit">hours</div>
     </div>
-    <div class="stat-card" id="oilCard">
+    <div class="stat-card tappable" id="oilCard" onclick="showOilDetail()">
       <div class="stat-label">Oil Change</div>
       <div class="stat-value" id="statOil">—</div>
       <div class="stat-unit" id="statOilSub"></div>
+      <div class="tap-hint">details ›</div>
     </div>
   </div>
 
@@ -766,6 +858,15 @@
   </div>
 
 </div><!-- /main -->
+
+<!-- MODAL BOTTOM SHEET -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="handleBackdropClick(event)">
+  <div class="modal-sheet" id="modalSheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div id="modalContent"></div>
+  </div>
+</div>
 
 <script>
 // ─── FLIGHT DATA ─────────────────────────────────────────────────────────────
@@ -1224,6 +1325,139 @@ function exportCSV() {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
   }
+
+// ─── MODAL ───────────────────────────────────────────────────────────────────
+function openModal(title, html) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleBackdropClick(e) {
+  if (e.target === document.getElementById('modalBackdrop')) closeModal();
+}
+
+function stat(label, value, accent) {
+  return `<div class="modal-stat">
+    <div class="modal-stat-label">${label}</div>
+    <div class="modal-stat-value${accent ? ' accent' : ''}">${value}</div>
+  </div>`;
+}
+
+function section(title) {
+  return `<div class="modal-section-title">${title}</div>`;
+}
+
+// ─── LAST FLIGHT DETAIL ──────────────────────────────────────────────────────
+function showLastFlightDetail() {
+  const flights = allFlights();
+  const f = flights[flights.length - 1];
+  const date = new Date(f.date + 'T12:00:00')
+    .toLocaleDateString('en-US', {weekday:'long', month:'long', day:'numeric', year:'numeric'});
+  const tachDur  = f.tachTotal  != null ? f.tachTotal.toFixed(1)  + ' hrs' : '—';
+  const hobbsDur = f.hobbsTotal != null ? f.hobbsTotal.toFixed(1) + ' hrs' : '—';
+  const tachRange  = (f.tachOut  != null && f.tachIn  != null) ? `${f.tachOut.toFixed(1)} → ${f.tachIn.toFixed(1)}`  : '—';
+  const hobbsRange = (f.hobbsOut != null && f.hobbsIn != null) ? `${f.hobbsOut.toFixed(1)} → ${f.hobbsIn.toFixed(1)}` : '—';
+
+  openModal('Last Flight', `
+    ${stat('Date', date)}
+    ${section('Duration')}
+    ${stat('Hobbs time', hobbsDur, true)}
+    ${stat('Tach time', tachDur)}
+    ${section('Meter Readings')}
+    ${stat('Hobbs out → in', hobbsRange)}
+    ${stat('Tach out → in', tachRange)}
+    ${f.maint ? section('Notes') + stat('', f.maint) : ''}
+  `);
+}
+
+// ─── TOTAL FLIGHTS DETAIL ────────────────────────────────────────────────────
+function showTotalFlightsDetail() {
+  const flights = allFlights();
+  const withHobbs = flights.filter(f => f.hobbsTotal != null && f.hobbsTotal > 0);
+  const withTach  = flights.filter(f => f.tachTotal  != null && f.tachTotal  > 0);
+
+  const avgHobbs = withHobbs.reduce((s, f) => s + f.hobbsTotal, 0) / withHobbs.length;
+  const avgTach  = withTach.reduce((s, f)  => s + f.tachTotal,  0) / withTach.length;
+
+  const sorted = [...withHobbs].sort((a, b) => a.hobbsTotal - b.hobbsTotal);
+  const shortest = sorted[0];
+  const longest  = sorted[sorted.length - 1];
+
+  const fmt = f => new Date(f.date + 'T12:00:00')
+    .toLocaleDateString('en-US', {month:'short', day:'numeric'});
+
+  openModal('Flight Statistics', `
+    ${stat('Total flights logged', flights.length)}
+    ${section('Average Duration')}
+    ${stat('Avg Hobbs per flight', avgHobbs.toFixed(1) + ' hrs', true)}
+    ${stat('Avg Tach per flight',  avgTach.toFixed(1)  + ' hrs')}
+    ${section('Range')}
+    ${stat('Shortest flight', shortest.hobbsTotal.toFixed(1) + ' hrs  (' + fmt(shortest) + ')')}
+    ${stat('Longest flight',  longest.hobbsTotal.toFixed(1)  + ' hrs  (' + fmt(longest)  + ')')}
+    ${section('Totals')}
+    ${stat('Total Hobbs logged', withHobbs.reduce((s,f) => s + f.hobbsTotal, 0).toFixed(1) + ' hrs')}
+    ${stat('Total Tach logged',  withTach.reduce((s,f)  => s + f.tachTotal,  0).toFixed(1) + ' hrs')}
+  `);
+}
+
+// ─── OIL CHANGE DETAIL ───────────────────────────────────────────────────────
+function showOilDetail() {
+  const flights = allFlights();
+  const last = flights[flights.length - 1];
+  const currentHobbs = last.hobbsIn ?? last.hobbsOut ?? 0;
+
+  // Average interval between full oil changes
+  const sortedOC = [...OIL_CHANGES].sort((a, b) => a.hobbs - b.hobbs);
+  const lastChange = sortedOC[sortedOC.length - 1];
+  const hoursSince = currentHobbs - lastChange.hobbs;
+  const dueAt = lastChange.hobbs + OIL_CHANGE_INTERVAL;
+  const remaining = dueAt - currentHobbs;
+
+  let prevHobbs = 0;
+  const changeIntervals = sortedOC.map(oc => {
+    const interval = oc.hobbs - prevHobbs;
+    prevHobbs = oc.hobbs;
+    return interval;
+  });
+  const avgChangeInterval = changeIntervals.reduce((a, b) => a + b, 0) / changeIntervals.length;
+
+  // Average hobbs between oil top-up events (oilAdded > 0, not oil changes)
+  const topUps = flights.filter(f => f.oilAdded > 0);
+  let topUpIntervals = [];
+  for (let i = 1; i < topUps.length; i++) {
+    const prev = topUps[i - 1].hobbsIn ?? topUps[i - 1].hobbsOut ?? 0;
+    const curr = topUps[i].hobbsIn ?? topUps[i].hobbsOut ?? 0;
+    if (curr > prev) topUpIntervals.push(curr - prev);
+  }
+  const avgTopUp = topUpIntervals.length > 0
+    ? (topUpIntervals.reduce((a, b) => a + b, 0) / topUpIntervals.length).toFixed(1) + ' hrs'
+    : '—';
+
+  const lastChangeDate = new Date(lastChange.date + 'T12:00:00')
+    .toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+
+  openModal('Oil Change Detail', `
+    ${section('Current Status')}
+    ${stat('Hours since last change', hoursSince.toFixed(1) + ' hrs', true)}
+    ${stat('Last change', lastChangeDate + '  (Hobbs ' + lastChange.hobbs.toFixed(1) + ')')}
+    ${stat('Due at Hobbs', dueAt.toFixed(1))}
+    ${stat('Remaining', (remaining > 0 ? remaining.toFixed(1) + ' hrs' : 'OVERDUE'))}
+    ${section('History')}
+    ${stat('Number of oil changes', sortedOC.length)}
+    ${stat('Avg hrs between changes', avgChangeInterval.toFixed(1) + ' hrs')}
+    ${section('Top-Ups (between changes)')}
+    ${stat('Top-up events logged', topUps.length)}
+    ${stat('Avg Hobbs between top-ups', avgTopUp)}
+    ${stat('Total oil added (top-ups)', topUps.reduce((s, f) => s + f.oilAdded, 0).toFixed(1) + ' qts')}
+  `);
+}
 </script>
 </body>
 </html>
