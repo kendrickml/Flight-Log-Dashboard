@@ -1,4 +1,4 @@
-const CACHE = 'n685sm-v6';
+const CACHE = 'n685sm-v7';
 const ASSETS = [
   '/Flight-Log-Dashboard/',
   '/manifest.json',
