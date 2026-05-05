@@ -102,9 +102,9 @@
   /* STAT CARDS */
   .stats-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
-    margin-bottom: 28px;
+    margin-bottom: 16px;
   }
   .stat-card {
     background: var(--bg2);
@@ -651,7 +651,7 @@
   }
 
   /* RESPONSIVE */
-  @media (max-width: 1100px) {
+  @media (max-width: 500px) {
     .stats-grid { grid-template-columns: repeat(3, 1fr); }
   }
   @media (max-width: 860px) {
@@ -682,11 +682,6 @@
 
   <!-- STATS -->
   <div class="stats-grid">
-    <div class="stat-card tappable" onclick="showLastFlightDetail()">
-      <div class="stat-label">Last Flight</div>
-      <div class="stat-value" id="statDaysAgo">—</div>
-      <div class="stat-unit" id="statLastDate"></div>
-    </div>
     <div class="stat-card violet tappable" onclick="showHobbsDetail()">
       <div class="stat-label">Current Hobbs</div>
       <div class="stat-value" id="statHobbs">—</div>
@@ -697,16 +692,23 @@
       <div class="stat-value" id="statFlights">—</div>
       <div class="stat-unit">logged entries</div>
     </div>
-    <div class="stat-card amber">
-      <div class="stat-label">Current Tach</div>
-      <div class="stat-value" id="statTach">—</div>
-      <div class="stat-unit">hours</div>
-    </div>
     <div class="stat-card tappable" id="oilCard" onclick="showOilDetail()">
       <div class="stat-label">Oil Change</div>
       <div class="stat-value" id="statOil">—</div>
       <div class="stat-unit" id="statOilSub"></div>
     </div>
+  </div>
+
+  <!-- LAST FLIGHT WIDE TILE -->
+  <div class="flight-log-tile tappable" style="border-top-color: var(--cyan); margin-bottom:16px;" onclick="showLastFlightDetail()">
+    <div style="display:flex; align-items:center; gap:16px;">
+      <div style="font-size:36px; line-height:1;">🛬</div>
+      <div>
+        <div class="flight-log-tile-label">Last Flight</div>
+        <div class="flight-log-tile-sub"><span id="statDaysAgo">—</span> days ago &nbsp;·&nbsp; <span id="statLastDate"></span></div>
+      </div>
+    </div>
+    <div class="flight-log-tile-arrow">›</div>
   </div>
 
   <!-- AIRCRAFT PHOTO -->
@@ -965,9 +967,9 @@ function renderStats(flights) {
 
   const lastDate = new Date(last.date + 'T12:00:00');
   const daysAgo = Math.round((Date.now() - lastDate) / 86400000);
-  document.getElementById('statDaysAgo').textContent = daysAgo;
+  document.getElementById('statDaysAgo').textContent = daysAgo === 0 ? 'Today' : daysAgo;
   document.getElementById('statLastDate').textContent =
-    daysAgo === 0 ? 'today' : lastDate.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+    daysAgo === 0 ? '' : lastDate.toLocaleDateString('en-US', {month:'short', day:'numeric'});
 
   // Most recent oil change
   const sortedOC = [...OIL_CHANGES].sort((a,b) => b.hobbs - a.hobbs);
