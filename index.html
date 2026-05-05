@@ -726,138 +726,16 @@
     </div>
   </div>
 
-  <!-- OIL STATUS BAR -->
-  <div class="oil-card">
-    <div class="oil-label-block">
-      <div class="oil-title">Oil Change Status</div>
-      <div class="oil-value" id="oilHrs">—</div>
-      <div class="oil-sub" id="oilSub">hours since last change</div>
-    </div>
-    <div class="oil-bar-wrap">
-      <div class="oil-bar-bg">
-        <div class="oil-bar-fill" id="oilBarFill" style="width:0%"></div>
-        <div class="oil-bar-marker" id="oilBarMarker" style="left:80%"></div>
-      </div>
-      <div class="oil-scale">
-        <span>0</span><span>7</span><span>14</span><span>21</span><span>28</span><span>35 hrs</span>
+  <!-- LOG NEW FLIGHT TILE -->
+  <div class="flight-log-tile tappable" style="border-top-color: var(--green); margin-bottom:16px;" onclick="showEntryModal()">
+    <div style="display:flex; align-items:center; gap:16px;">
+      <div style="font-size:36px; line-height:1;">🛫</div>
+      <div>
+        <div class="flight-log-tile-label">Log New Flight</div>
+        <div class="flight-log-tile-sub">Tap to record tach, hobbs &amp; notes</div>
       </div>
     </div>
-    <div class="oil-stats">
-      <div class="oil-stat">
-        <div class="oil-stat-val" id="oilQtsAdded">—</div>
-        <div class="oil-stat-lbl">qts added total</div>
-      </div>
-      <div class="oil-stat">
-        <div class="oil-stat-val" id="oilDueAt">—</div>
-        <div class="oil-stat-lbl">due at hobbs</div>
-      </div>
-      <div class="oil-stat">
-        <div class="oil-stat-val" id="oilRemaining">—</div>
-        <div class="oil-stat-lbl">hrs remaining</div>
-      </div>
-      <div class="oil-stat">
-        <div class="oil-stat-val" id="oilAvgInterval">—</div>
-        <div class="oil-stat-lbl">avg hrs/change</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- NEW ENTRY -->
-  <div class="entry-card">
-    <div class="entry-header">
-      <div class="entry-title">Log New Flight Entry</div>
-      <span style="font-size:11px; color:var(--muted)">Upload avionics photo · fill values · submit</span>
-    </div>
-    <div class="entry-body">
-      <div class="entry-grid">
-
-        <!-- PHOTO ZONE -->
-        <div>
-          <div class="photo-zone" id="photoZone">
-            <input type="file" id="photoInput" accept="image/*">
-            <div class="photo-placeholder" id="photoPlaceholder">
-              <div class="photo-icon">📷</div>
-              <div class="photo-hint">
-                <strong>Drop avionics photo here</strong><br>
-                or click to browse<br><br>
-                <span style="font-size:11px">Shows tach &amp; hobbs for reference</span>
-              </div>
-            </div>
-            <button class="photo-clear" id="photoClear" onclick="clearPhoto(event)">✕ clear</button>
-          </div>
-        </div>
-
-        <!-- FORM -->
-        <div>
-          <div class="form-section">
-            <div class="form-section-title">Flight Info</div>
-            <div class="form-row two-col">
-              <div class="field">
-                <label>Date</label>
-                <input type="date" id="fDate">
-              </div>
-              <div class="field">
-                <label>Oil Added (qts)</label>
-                <input type="number" id="fOilAdded" step="0.1" min="0" placeholder="0">
-              </div>
-            </div>
-          </div>
-
-          <div class="form-section">
-            <div class="form-section-title">Tach Time</div>
-            <div class="form-row">
-              <div class="field">
-                <label>Tach Out</label>
-                <input type="number" id="fTachOut" step="0.1" placeholder="59.3" oninput="calcTotals()">
-              </div>
-              <div class="field">
-                <label>Tach In</label>
-                <input type="number" id="fTachIn" step="0.1" placeholder="" oninput="calcTotals()">
-              </div>
-              <div class="field">
-                <label>Tach Total</label>
-                <input type="number" id="fTachTotal" step="0.1" class="calculated" readonly placeholder="auto">
-              </div>
-            </div>
-          </div>
-
-          <div class="form-section">
-            <div class="form-section-title">Hobbs Time</div>
-            <div class="form-row">
-              <div class="field">
-                <label>Hobbs Out</label>
-                <input type="number" id="fHobbsOut" step="0.1" placeholder="66.0" oninput="calcTotals()">
-              </div>
-              <div class="field">
-                <label>Hobbs In</label>
-                <input type="number" id="fHobbsIn" step="0.1" placeholder="" oninput="calcTotals()">
-              </div>
-              <div class="field">
-                <label>Hobbs Total</label>
-                <input type="number" id="fHobbsTotal" step="0.1" class="calculated" readonly placeholder="auto">
-              </div>
-            </div>
-          </div>
-
-          <div class="form-section">
-            <div class="form-section-title">Notes</div>
-            <div class="form-row one-col">
-              <div class="field">
-                <label>Maintenance / Notes</label>
-                <textarea id="fNotes" placeholder="ACA, fuel added, squawks, etc."></textarea>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-actions">
-            <button class="btn btn-primary" onclick="submitEntry()">Add to Log</button>
-            <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
-            <div class="success-msg" id="successMsg">✓ Entry added</div>
-            <button class="btn btn-export" onclick="exportCSV()">↓ Export CSV</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <div class="flight-log-tile-arrow">›</div>
   </div>
 
   <!-- FLIGHT LOG TILE -->
@@ -877,6 +755,70 @@
     <div class="modal-handle"></div>
     <div class="modal-title" id="modalTitle"></div>
     <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- LOG NEW FLIGHT MODAL -->
+<div class="modal-backdrop" id="entryModalBackdrop" onclick="handleEntryBackdropClick(event)">
+  <div class="modal-sheet" id="entryModalSheet" style="max-height:92vh; overflow-y:auto;">
+    <div class="modal-handle"></div>
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
+      <div style="font-size:32px;">🛫</div>
+      <div class="modal-title" style="margin-bottom:0;">Log New Flight</div>
+    </div>
+
+    <!-- PHOTO ZONE -->
+    <div class="photo-zone" id="photoZone" style="margin-bottom:20px; min-height:180px;">
+      <input type="file" id="photoInput" accept="image/*" capture="environment">
+      <div class="photo-placeholder" id="photoPlaceholder">
+        <div style="font-size:52px; margin-bottom:8px;">✈️</div>
+        <div class="photo-hint">
+          <strong>Tap to snap avionics photo</strong><br>
+          <span style="font-size:11px;">Shows tach &amp; hobbs for reference</span>
+        </div>
+      </div>
+      <button class="photo-clear" id="photoClear" onclick="clearPhoto(event)">✕ clear</button>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">Flight Info</div>
+      <div class="form-row two-col">
+        <div class="field"><label>Date</label><input type="date" id="fDate"></div>
+        <div class="field"><label>Oil Added (qts)</label><input type="number" id="fOilAdded" step="0.1" min="0" placeholder="0"></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">Tach Time</div>
+      <div class="form-row">
+        <div class="field"><label>Tach Out</label><input type="number" id="fTachOut" step="0.1" placeholder="59.3" oninput="calcTotals()"></div>
+        <div class="field"><label>Tach In</label><input type="number" id="fTachIn" step="0.1" oninput="calcTotals()"></div>
+        <div class="field"><label>Tach Total</label><input type="number" id="fTachTotal" step="0.1" class="calculated" readonly placeholder="auto"></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">Hobbs Time</div>
+      <div class="form-row">
+        <div class="field"><label>Hobbs Out</label><input type="number" id="fHobbsOut" step="0.1" placeholder="66.0" oninput="calcTotals()"></div>
+        <div class="field"><label>Hobbs In</label><input type="number" id="fHobbsIn" step="0.1" oninput="calcTotals()"></div>
+        <div class="field"><label>Hobbs Total</label><input type="number" id="fHobbsTotal" step="0.1" class="calculated" readonly placeholder="auto"></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="form-section-title">Notes</div>
+      <div class="form-row one-col">
+        <div class="field"><label>Maintenance / Notes</label><textarea id="fNotes" placeholder="ACA, fuel added, squawks, etc."></textarea></div>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="submitEntry()">Add to Log</button>
+      <button class="btn btn-secondary" onclick="clearForm()">Clear</button>
+      <div class="success-msg" id="successMsg">✓ Entry added</div>
+      <button class="btn btn-export" onclick="exportCSV()">↓ Export CSV</button>
+    </div>
   </div>
 </div>
 
@@ -1293,7 +1235,7 @@ function submitEntry() {
 
   const msg = document.getElementById('successMsg');
   msg.style.display = 'flex';
-  setTimeout(() => msg.style.display = 'none', 3000);
+  setTimeout(() => { msg.style.display = 'none'; closeEntryModal(); }, 1500);
 
   clearForm(true);
   render();
@@ -1384,6 +1326,20 @@ function closeModal() {
 
 function handleBackdropClick(e) {
   if (e.target === document.getElementById('modalBackdrop')) closeModal();
+}
+
+function showEntryModal() {
+  document.getElementById('entryModalBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEntryModal() {
+  document.getElementById('entryModalBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleEntryBackdropClick(e) {
+  if (e.target === document.getElementById('entryModalBackdrop')) closeEntryModal();
 }
 
 function showFlightLog() {
