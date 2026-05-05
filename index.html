@@ -1409,7 +1409,7 @@ async function autoFillFromPhoto(e) {
             },
             {
               type: 'text',
-              text: 'This is a photo of aircraft avionics. Read the tach meter and hobbs meter values visible in the image. Return ONLY a JSON object in this exact format: {"tachOut": 59.3, "hobbsOut": 66.0}. Use numbers with one decimal place. If you cannot read a value clearly, use null for that field.'
+              text: 'This is a photo of aircraft avionics taken at the END of a flight. Read the tach meter and hobbs meter values visible in the image. Return ONLY a JSON object in this exact format: {"tachIn": 59.3, "hobbsIn": 66.0}. Use numbers with one decimal place. If you cannot read a value clearly, use null for that field.'
             }
           ]
         }]
@@ -1429,13 +1429,19 @@ async function autoFillFromPhoto(e) {
     if (!match) throw new Error('Could not parse response from Claude.');
     const values = JSON.parse(match[0]);
 
+    // Auto-populate Out fields from last logged flight's In values
+    const flights = allFlights();
+    const last = flights[flights.length - 1];
+    if (last.tachIn  != null) document.getElementById('fTachOut').value  = last.tachIn;
+    if (last.hobbsIn != null) document.getElementById('fHobbsOut').value = last.hobbsIn;
+
     let filled = 0;
-    if (values.tachOut != null) {
-      document.getElementById('fTachOut').value = values.tachOut;
+    if (values.tachIn != null) {
+      document.getElementById('fTachIn').value = values.tachIn;
       filled++;
     }
-    if (values.hobbsOut != null) {
-      document.getElementById('fHobbsOut').value = values.hobbsOut;
+    if (values.hobbsIn != null) {
+      document.getElementById('fHobbsIn').value = values.hobbsIn;
       filled++;
     }
     calcTotals();
