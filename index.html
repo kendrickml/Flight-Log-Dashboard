@@ -740,9 +740,12 @@
 
   <!-- FLIGHT LOG TILE -->
   <div class="flight-log-tile tappable" onclick="showFlightLog()">
-    <div>
-      <div class="flight-log-tile-label">Flight Log</div>
-      <div class="flight-log-tile-sub" id="flightCount">0 entries</div>
+    <div style="display:flex; align-items:center; gap:16px;">
+      <div style="font-size:36px; line-height:1;">📓</div>
+      <div>
+        <div class="flight-log-tile-label">Flight Log</div>
+        <div class="flight-log-tile-sub" id="flightCount">0 entries</div>
+      </div>
     </div>
     <div class="flight-log-tile-arrow">›</div>
   </div>
@@ -762,14 +765,17 @@
 <div class="modal-backdrop" id="entryModalBackdrop" onclick="handleEntryBackdropClick(event)">
   <div class="modal-sheet" id="entryModalSheet" style="max-height:92vh; overflow-y:auto;">
     <div class="modal-handle"></div>
-    <div style="display:flex; align-items:center; gap:12px; margin-bottom:24px;">
-      <div style="font-size:32px;">🛫</div>
-      <div class="modal-title" style="margin-bottom:0;">Log New Flight</div>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div style="font-size:32px;">🛫</div>
+        <div class="modal-title" style="margin-bottom:0;">Log New Flight</div>
+      </div>
+      <button onclick="closeEntryModal()" style="background:var(--bg3); border:1px solid var(--border); border-radius:20px; padding:6px 14px; font-size:13px; color:var(--muted); cursor:pointer;">Done</button>
     </div>
 
     <!-- PHOTO ZONE -->
     <div class="photo-zone" id="photoZone" style="margin-bottom:20px; min-height:180px;">
-      <input type="file" id="photoInput" accept="image/*" capture="environment">
+      <input type="file" id="photoInput" accept="image/*">
       <div class="photo-placeholder" id="photoPlaceholder">
         <div style="font-size:52px; margin-bottom:8px;">✈️</div>
         <div class="photo-hint">
