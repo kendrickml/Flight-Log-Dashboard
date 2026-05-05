@@ -784,15 +784,14 @@
 
     <!-- PHOTO ZONE -->
     <div class="photo-zone" id="photoZone" style="margin-bottom:20px; min-height:180px;">
-      <input type="file" id="photoInput" accept="image/*"
-        style="position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; z-index:5;">
-      <div class="photo-placeholder" id="photoPlaceholder">
+      <input type="file" id="photoInput" accept="image/*" style="display:none;">
+      <label for="photoInput" id="photoPlaceholder" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; cursor:pointer; z-index:5;">
         <div style="font-size:52px; margin-bottom:8px;">✈️</div>
-        <div class="photo-hint">
+        <div class="photo-hint" style="text-align:center;">
           <strong>Tap to snap avionics photo</strong><br>
           <span style="font-size:11px;">Shows tach &amp; hobbs for reference</span>
         </div>
-      </div>
+      </label>
       <button class="photo-clear" id="photoClear" onclick="clearPhoto(event)" style="z-index:10;">✕ clear</button>
     </div>
 
