@@ -784,7 +784,8 @@
 
     <!-- PHOTO ZONE -->
     <div class="photo-zone" id="photoZone" style="margin-bottom:20px; min-height:180px;">
-      <input type="file" id="photoInput" accept="image/*">
+      <input type="file" id="photoInput" accept="image/*"
+        style="position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer; z-index:5;">
       <div class="photo-placeholder" id="photoPlaceholder">
         <div style="font-size:52px; margin-bottom:8px;">✈️</div>
         <div class="photo-hint">
@@ -792,7 +793,7 @@
           <span style="font-size:11px;">Shows tach &amp; hobbs for reference</span>
         </div>
       </div>
-      <button class="photo-clear" id="photoClear" onclick="clearPhoto(event)">✕ clear</button>
+      <button class="photo-clear" id="photoClear" onclick="clearPhoto(event)" style="z-index:10;">✕ clear</button>
     </div>
 
     <div class="form-section">
@@ -839,7 +840,7 @@
 
 <!-- FLIGHT LOG MODAL (full height) -->
 <div class="modal-backdrop" id="logModalBackdrop" onclick="handleLogBackdropClick(event)">
-  <div class="modal-sheet" id="logModalSheet" style="max-height:92vh; display:flex; flex-direction:column;">
+  <div class="modal-sheet" id="logModalSheet" style="max-height:92vh; display:flex; flex-direction:column; overflow:hidden; padding-bottom:0;">
     <div class="modal-handle" onclick="closeLogModal()" style="cursor:pointer;"></div>
     <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-shrink:0;">
       <div class="modal-title" style="margin-bottom:0">Flight Log</div>
@@ -958,10 +959,8 @@ function render() {
 // ─── STATS ───────────────────────────────────────────────────────────────────
 function renderStats(flights) {
   const last = flights[flights.length - 1];
-  const currentTach  = last.tachIn  ?? last.tachOut  ?? 0;
   const currentHobbs = last.hobbsIn ?? last.hobbsOut ?? 0;
 
-  document.getElementById('statTach').textContent  = currentTach.toFixed(1);
   document.getElementById('statHobbs').textContent = currentHobbs.toFixed(1);
   document.getElementById('statFlights').textContent = flights.length;
 
@@ -1243,7 +1242,6 @@ function setupPhotoZone() {
   const zone  = document.getElementById('photoZone');
   const input = document.getElementById('photoInput');
 
-  zone.addEventListener('click', e => { if (e.target.id !== 'photoClear') input.click(); });
   zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
   zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
   zone.addEventListener('drop', e => {
