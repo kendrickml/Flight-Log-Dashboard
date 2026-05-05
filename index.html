@@ -237,6 +237,39 @@
   .stat-card.violet{ --accent: var(--violet); }
   .stat-card.amber { --accent: var(--amber); }
 
+  /* FLIGHT LOG TILE */
+  .flight-log-tile {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+    border-top: 7px solid var(--cyan);
+  }
+  .flight-log-tile:active {
+    transform: scale(0.99);
+    box-shadow: 0 1px 4px rgba(15,23,42,0.08);
+  }
+  .flight-log-tile-label {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .flight-log-tile-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .flight-log-tile-arrow {
+    font-size: 28px;
+    color: var(--muted);
+    line-height: 1;
+  }
+
   /* CHARTS */
   .charts-grid {
     display: grid;
@@ -827,31 +860,13 @@
     </div>
   </div>
 
-  <!-- FLIGHT LOG TABLE -->
-  <div class="table-card">
-    <div class="table-header">
-      <div class="table-title">Flight Log</div>
-      <div class="table-count" id="flightCount">0 entries</div>
+  <!-- FLIGHT LOG TILE -->
+  <div class="flight-log-tile tappable" onclick="showFlightLog()">
+    <div>
+      <div class="flight-log-tile-label">Flight Log</div>
+      <div class="flight-log-tile-sub" id="flightCount">0 entries</div>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>Tach Out</th>
-            <th>Tach In</th>
-            <th>Tach Total</th>
-            <th>Hobbs Out</th>
-            <th>Hobbs In</th>
-            <th>Hobbs Total</th>
-            <th>Oil Added</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-        <tbody id="logTableBody"></tbody>
-      </table>
-    </div>
+    <div class="flight-log-tile-arrow">›</div>
   </div>
 
 </div><!-- /main -->
@@ -862,6 +877,36 @@
     <div class="modal-handle"></div>
     <div class="modal-title" id="modalTitle"></div>
     <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- FLIGHT LOG MODAL (full height) -->
+<div class="modal-backdrop" id="logModalBackdrop" onclick="handleLogBackdropClick(event)">
+  <div class="modal-sheet" id="logModalSheet" style="max-height:92vh;">
+    <div class="modal-handle"></div>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+      <div class="modal-title" style="margin-bottom:0">Flight Log</div>
+      <div id="logModalCount" style="font-size:12px; color:var(--muted);"></div>
+    </div>
+    <div style="overflow-x:auto; overflow-y:auto; max-height:calc(92vh - 120px);">
+      <table style="width:100%; border-collapse:collapse; font-size:13px;">
+        <thead>
+          <tr>
+            <th style="background:var(--bg3); padding:10px 14px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-weight:600; white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0;">#</th>
+            <th style="background:var(--bg3); padding:10px 14px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-weight:600; white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0;">Date</th>
+            <th style="background:var(--bg3); padding:10px 14px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-weight:600; white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0;">Tach Out</th>
+            <th style="background:var(--bg3); padding:10px 14px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-weight:600; white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0;">Tach In</th>
+            <th style="background:var(--bg3); padding:10px 14px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-weight:600; white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0;">Tach Total</th>
+            <th style="background:var(--bg3); padding:10px 14px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-weight:600; white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0;">Hobbs Out</th>
+            <th style="background:var(--bg3); padding:10px 14px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-weight:600; white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0;">Hobbs In</th>
+            <th style="background:var(--bg3); padding:10px 14px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-weight:600; white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0;">Hobbs Total</th>
+            <th style="background:var(--bg3); padding:10px 14px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-weight:600; white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0;">Oil Added</th>
+            <th style="background:var(--bg3); padding:10px 14px; text-align:left; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); font-weight:600; white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0;">Notes</th>
+          </tr>
+        </thead>
+        <tbody id="logTableBody"></tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -1029,6 +1074,7 @@ function showAlert(msg) {
 function renderTable(flights) {
   const tbody = document.getElementById('logTableBody');
   document.getElementById('flightCount').textContent = `${flights.length} entries`;
+  document.getElementById('logModalCount').textContent = `${flights.length} entries`;
 
   const sortedOC = [...OIL_CHANGES].sort((a,b) => a.hobbs - b.hobbs);
 
@@ -1338,6 +1384,20 @@ function closeModal() {
 
 function handleBackdropClick(e) {
   if (e.target === document.getElementById('modalBackdrop')) closeModal();
+}
+
+function showFlightLog() {
+  document.getElementById('logModalBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLogModal() {
+  document.getElementById('logModalBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleLogBackdropClick(e) {
+  if (e.target === document.getElementById('logModalBackdrop')) closeLogModal();
 }
 
 function stat(label, value, accent) {
