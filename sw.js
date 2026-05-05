@@ -1,4 +1,4 @@
-const CACHE = 'n685sm-v12';
+const CACHE = 'n685sm-v13';
 const ASSETS = [
   '/Flight-Log-Dashboard/',
   '/manifest.json',
@@ -22,8 +22,15 @@ self.addEventListener('activate', e => {
   );
 });
 
+// Network-first: always try live network, fall back to cache only when offline
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
+    fetch(e.request)
+      .then(response => {
+        const copy = response.clone();
+        caches.open(CACHE).then(c => c.put(e.request, copy));
+        return response;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
