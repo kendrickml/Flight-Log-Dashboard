@@ -687,7 +687,7 @@
       <div class="stat-value" id="statDaysAgo">—</div>
       <div class="stat-unit" id="statLastDate"></div>
     </div>
-    <div class="stat-card violet">
+    <div class="stat-card violet tappable" onclick="showHobbsDetail()">
       <div class="stat-label">Current Hobbs</div>
       <div class="stat-value" id="statHobbs">—</div>
       <div class="stat-unit">hours</div>
@@ -712,18 +712,6 @@
   <!-- AIRCRAFT PHOTO -->
   <div style="margin-bottom:24px; border-radius:12px; overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--border);">
     <img src="685SM_Image.jpeg" alt="N685SM Super Decathlon" style="width:100%; display:block; max-height:380px; object-fit:cover;">
-  </div>
-
-  <!-- CHARTS -->
-  <div class="charts-grid">
-    <div class="chart-card">
-      <div class="chart-title">Monthly Hobbs Hours</div>
-      <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-title">Cumulative Hobbs Hours</div>
-      <div class="chart-wrap"><canvas id="cumulativeChart"></canvas></div>
-    </div>
   </div>
 
   <!-- LOG NEW FLIGHT TILE -->
@@ -758,6 +746,25 @@
     <div class="modal-handle" onclick="closeModal()" style="cursor:pointer;"></div>
     <div class="modal-title" id="modalTitle"></div>
     <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- HOBBS CHARTS MODAL -->
+<div class="modal-backdrop" id="hobbsModalBackdrop" onclick="handleHobbsBackdropClick(event)">
+  <div class="modal-sheet" id="hobbsModalSheet" style="max-height:92vh; overflow-y:auto;">
+    <div class="modal-handle" onclick="closeHobbsModal()" style="cursor:pointer;"></div>
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;">
+      <div class="modal-title" style="margin-bottom:0;">Hobbs Hours</div>
+      <button onclick="closeHobbsModal()" style="background:var(--bg3); border:1px solid var(--border); border-radius:20px; padding:6px 14px; font-size:13px; color:var(--muted); cursor:pointer;">Done</button>
+    </div>
+    <div class="chart-card" style="margin-bottom:20px;">
+      <div class="chart-title">Monthly Hobbs Hours</div>
+      <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">Cumulative Hobbs Hours</div>
+      <div class="chart-wrap"><canvas id="cumulativeChart"></canvas></div>
+    </div>
   </div>
 </div>
 
@@ -1307,6 +1314,21 @@ function closeModal() {
 
 function handleBackdropClick(e) {
   if (e.target === document.getElementById('modalBackdrop')) closeModal();
+}
+
+function showHobbsDetail() {
+  document.getElementById('hobbsModalBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderCharts(allFlights());
+}
+
+function closeHobbsModal() {
+  document.getElementById('hobbsModalBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleHobbsBackdropClick(e) {
+  if (e.target === document.getElementById('hobbsModalBackdrop')) closeHobbsModal();
 }
 
 function showEntryModal() {
